@@ -1,4 +1,4 @@
-FROM maven:3.8.6-eclipse-temurin-11 AS build
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
@@ -7,7 +7,7 @@ COPY src ./src
 RUN echo "spring.application.name=supply-chain-visualizer" > src/main/resources/application.properties
 RUN mvn package -DskipTests -B
 
-FROM eclipse-temurin:11-jre
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 COPY entrypoint.sh .
