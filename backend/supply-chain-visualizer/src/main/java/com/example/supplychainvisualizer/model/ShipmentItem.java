@@ -1,6 +1,6 @@
 package com.example.supplychainvisualizer.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "shipment_items")
