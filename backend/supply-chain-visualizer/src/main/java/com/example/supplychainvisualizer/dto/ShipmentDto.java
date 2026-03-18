@@ -1,6 +1,6 @@
 package com.example.supplychainvisualizer.dto;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
