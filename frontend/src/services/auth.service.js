@@ -8,17 +8,28 @@ class AuthService {
       .post(API_URL + 'login', {
         username,
         password
-      })
+      }, { withCredentials: true })
       .then(response => {
-        if (response.data.token) {
-          localStorage.setItem('user', JSON.stringify(response.data));
+        // Store non-sensitive user info for UI purposes (token is in httpOnly cookie)
+        if (response.data) {
+          const userData = {
+            id: response.data.id,
+            username: response.data.username,
+            email: response.data.email,
+            roles: response.data.roles
+          };
+          localStorage.setItem('user', JSON.stringify(userData));
         }
         return response.data;
       });
   }
 
   logout() {
-    localStorage.removeItem('user');
+    return axios.post(API_URL + 'logout', {}, { withCredentials: true }).then(() => {
+      localStorage.removeItem('user');
+    }).catch(() => {
+      localStorage.removeItem('user');
+    });
   }
 
   register(username, password) {

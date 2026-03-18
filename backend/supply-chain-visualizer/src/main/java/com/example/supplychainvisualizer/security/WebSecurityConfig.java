@@ -46,6 +46,11 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public RateLimitFilter rateLimitFilter() {
+        return new RateLimitFilter();
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -76,8 +81,6 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(requests -> requests
                 .requestMatchers(
                     new AntPathRequestMatcher("/api/auth/**"),
-                    new AntPathRequestMatcher("/api/public/**"),
-                    new AntPathRequestMatcher("/api/test/**"),
                     // Allow static resources
                     new AntPathRequestMatcher("/css/**"),
                     new AntPathRequestMatcher("/js/**"),
@@ -88,6 +91,7 @@ public class WebSecurityConfig {
                 .anyRequest().authenticated()
             );
 
+        http.addFilterBefore(rateLimitFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
