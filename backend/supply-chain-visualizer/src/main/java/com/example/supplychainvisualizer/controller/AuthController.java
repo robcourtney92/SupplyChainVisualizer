@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -71,30 +70,20 @@ public class AuthController {
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
 
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use!"));
+        }
+
         // Create new user's account
         User user = new User();
         user.setUsername(signUpRequest.getUsername());
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
+        user.setEmail(signUpRequest.getEmail());
 
-        Set<String> strRoles = signUpRequest.getRoles();
         Set<String> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            roles.add("ROLE_USER");
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        roles.add("ROLE_ADMIN");
-                        break;
-                    case "mod":
-                        roles.add("ROLE_MODERATOR");
-                        break;
-                    default:
-                        roles.add("ROLE_USER");
-                }
-            });
-        }
+        roles.add("ROLE_USER");
 
         user.setRoles(roles);
         userRepository.save(user);

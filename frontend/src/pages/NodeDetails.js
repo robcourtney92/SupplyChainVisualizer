@@ -41,7 +41,7 @@ const NodeDetails = () => {
       setNode(nodeResponse.data);
       
       // Fetch related data
-      const inventoryResponse = await InventoryService.getInventoryByNodeId(id);
+      const inventoryResponse = await InventoryService.getInventoryByNode(id);
       setInventory(inventoryResponse.data);
       
       const connectionsResponse = await ConnectionService.getAllConnections();

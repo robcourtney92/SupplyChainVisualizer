@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/inventory")
 public class InventoryController {
@@ -34,6 +33,14 @@ public class InventoryController {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<InventoryDto> createOrUpdateInventory(@Valid @RequestBody InventoryDto inventoryDto) {
         return ResponseEntity.ok(inventoryService.createOrUpdateInventory(inventoryDto));
+    }
+    
+    @PutMapping("/{id:\\d+}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<InventoryDto> updateInventory(@PathVariable Long id, @Valid @RequestBody InventoryDto inventoryDto) {
+        return inventoryService.updateInventoryById(id, inventoryDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
     
     @DeleteMapping("/{id:\\d+}")

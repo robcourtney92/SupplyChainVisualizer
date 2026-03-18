@@ -6,6 +6,7 @@ import './Auth.css';
 
 const Register = () => {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -26,7 +27,7 @@ const Register = () => {
       return;
     }
 
-    AuthService.register(username, password)
+    AuthService.register(username, email, password)
       .then(() => {
         setSuccessful(true);
         setMessage('Registration successful! You can now log in.');
@@ -83,6 +84,17 @@ const Register = () => {
                         required
                         minLength="3"
                         maxLength="20"
+                        className="form-input"
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="form-group-spacing">
+                      <Form.Label>Email</Form.Label>
+                      <Form.Control
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
                         className="form-input"
                       />
                     </Form.Group>

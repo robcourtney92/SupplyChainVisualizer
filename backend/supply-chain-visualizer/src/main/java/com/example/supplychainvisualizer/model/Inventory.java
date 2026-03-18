@@ -30,6 +30,8 @@ public class Inventory {
 
     private Integer maxThreshold;
 
+    private String status;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -85,6 +87,14 @@ public class Inventory {
 
     public void setMaxThreshold(Integer maxThreshold) {
         this.maxThreshold = maxThreshold;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public LocalDateTime getCreatedAt() {

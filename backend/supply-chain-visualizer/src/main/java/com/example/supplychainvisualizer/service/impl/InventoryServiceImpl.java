@@ -59,6 +59,7 @@ public class InventoryServiceImpl implements InventoryService {
                 inventory.setQuantity(inventoryDto.getQuantity());
                 inventory.setMinThreshold(inventoryDto.getMinThreshold());
                 inventory.setMaxThreshold(inventoryDto.getMaxThreshold());
+                inventory.setStatus(inventoryDto.getStatus());
             } else {
                 // Create new inventory
                 inventory = new Inventory();
@@ -67,6 +68,7 @@ public class InventoryServiceImpl implements InventoryService {
                 inventory.setQuantity(inventoryDto.getQuantity());
                 inventory.setMinThreshold(inventoryDto.getMinThreshold());
                 inventory.setMaxThreshold(inventoryDto.getMaxThreshold());
+                inventory.setStatus(inventoryDto.getStatus());
             }
             
             Inventory savedInventory = inventoryRepository.save(inventory);
@@ -74,6 +76,18 @@ public class InventoryServiceImpl implements InventoryService {
         }
         
         return inventoryDto; // Return original DTO if node or product not found
+    }
+
+    @Override
+    public Optional<InventoryDto> updateInventoryById(Long id, InventoryDto inventoryDto) {
+        return inventoryRepository.findById(id).map(inventory -> {
+            inventory.setQuantity(inventoryDto.getQuantity());
+            inventory.setMinThreshold(inventoryDto.getMinThreshold());
+            inventory.setMaxThreshold(inventoryDto.getMaxThreshold());
+            inventory.setStatus(inventoryDto.getStatus());
+            Inventory savedInventory = inventoryRepository.save(inventory);
+            return convertToDto(savedInventory);
+        });
     }
 
     @Override
@@ -119,6 +133,8 @@ public class InventoryServiceImpl implements InventoryService {
         inventoryDto.setQuantity(inventory.getQuantity());
         inventoryDto.setMinThreshold(inventory.getMinThreshold());
         inventoryDto.setMaxThreshold(inventory.getMaxThreshold());
+        inventoryDto.setStatus(inventory.getStatus());
+        inventoryDto.setUpdatedAt(inventory.getUpdatedAt());
         return inventoryDto;
     }
 }
