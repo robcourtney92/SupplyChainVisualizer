@@ -38,8 +38,9 @@ public class InventoryController {
     @PutMapping("/{id:\\d+}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<InventoryDto> updateInventory(@PathVariable Long id, @Valid @RequestBody InventoryDto inventoryDto) {
-        inventoryDto.setId(id);
-        return ResponseEntity.ok(inventoryService.createOrUpdateInventory(inventoryDto));
+        return inventoryService.updateInventoryById(id, inventoryDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
     
     @DeleteMapping("/{id:\\d+}")

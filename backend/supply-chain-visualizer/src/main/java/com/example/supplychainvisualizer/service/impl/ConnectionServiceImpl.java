@@ -44,11 +44,13 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Override
     public Optional<ConnectionDto> updateConnection(Long id, ConnectionDto connectionDto) {
         return connectionRepository.findById(id).map(existingConnection -> {
-            Optional<Node> sourceOpt = nodeRepository.findById(connectionDto.getSourceId());
-            Optional<Node> targetOpt = nodeRepository.findById(connectionDto.getTargetId());
+            Node source = nodeRepository.findById(connectionDto.getSourceId())
+                    .orElseThrow(() -> new IllegalArgumentException("Source node not found with id: " + connectionDto.getSourceId()));
+            Node target = nodeRepository.findById(connectionDto.getTargetId())
+                    .orElseThrow(() -> new IllegalArgumentException("Target node not found with id: " + connectionDto.getTargetId()));
 
-            sourceOpt.ifPresent(existingConnection::setSource);
-            targetOpt.ifPresent(existingConnection::setTarget);
+            existingConnection.setSource(source);
+            existingConnection.setTarget(target);
 
             existingConnection.setTransportationType(connectionDto.getTransportationType());
             existingConnection.setDistance(connectionDto.getDistance());
