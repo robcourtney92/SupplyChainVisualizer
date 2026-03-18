@@ -3,16 +3,20 @@ package com.example.supplychainvisualizer.dto.request;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 public class SignupRequest {
+    @NotBlank
+    @Size(min = 3, max = 50)
     private String username;
 
+    @NotBlank
+    @Email
+    @Size(max = 100)
     private String email;
 
+    @NotBlank
+    @Size(min = 8, max = 120)
     private String password;
-
-    private Set<String> roles;
 
     public String getUsername() {
         return username;
@@ -36,13 +40,5 @@ public class SignupRequest {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Set<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
     }
 }

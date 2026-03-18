@@ -1,9 +1,6 @@
+// JWT is now managed via httpOnly cookie sent automatically by the browser.
+// This function returns an empty object for backward compatibility with
+// service files that still call authHeader().
 export default function authHeader() {
-    const user = JSON.parse(localStorage.getItem('user'));
-  
-    if (user && user.token) {
-      return { Authorization: 'Bearer ' + user.token };
-    } else {
-      return {};
-    }
+    return {};
   }
