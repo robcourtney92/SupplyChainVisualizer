@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Container, Card, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import PageHeader from '../components/common/PageHeader';
