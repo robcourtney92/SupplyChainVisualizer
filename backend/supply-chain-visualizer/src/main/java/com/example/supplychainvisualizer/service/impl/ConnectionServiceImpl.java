@@ -115,11 +115,13 @@ public class ConnectionServiceImpl implements ConnectionService {
 
     private Connection convertToEntity(ConnectionDto dto) {
         Connection connection = new Connection();
-        Optional<Node> sourceOpt = nodeRepository.findById(dto.getSourceId());
-        Optional<Node> targetOpt = nodeRepository.findById(dto.getTargetId());
+        Node source = nodeRepository.findById(dto.getSourceId())
+                .orElseThrow(() -> new IllegalArgumentException("Source node not found with id: " + dto.getSourceId()));
+        Node target = nodeRepository.findById(dto.getTargetId())
+                .orElseThrow(() -> new IllegalArgumentException("Target node not found with id: " + dto.getTargetId()));
 
-        sourceOpt.ifPresent(connection::setSource);
-        targetOpt.ifPresent(connection::setTarget);
+        connection.setSource(source);
+        connection.setTarget(target);
 
         connection.setTransportationType(dto.getTransportationType());
         connection.setDistance(dto.getDistance());

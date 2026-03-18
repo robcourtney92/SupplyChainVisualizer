@@ -35,6 +35,13 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.createOrUpdateInventory(inventoryDto));
     }
     
+    @PutMapping("/{id:\\d+}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<InventoryDto> updateInventory(@PathVariable Long id, @Valid @RequestBody InventoryDto inventoryDto) {
+        inventoryDto.setId(id);
+        return ResponseEntity.ok(inventoryService.createOrUpdateInventory(inventoryDto));
+    }
+    
     @DeleteMapping("/{id:\\d+}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> deleteInventory(@PathVariable Long id) {
