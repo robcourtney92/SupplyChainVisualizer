@@ -73,14 +73,8 @@ const SupplyChainMap = () => {
   useEffect(() => {
     const fetchMapData = async () => {
       try {
-        // Update the authentication headers if needed
-        const authHeader = localStorage.getItem('token') 
-          ? { Authorization: `Bearer ${localStorage.getItem('token')}` }
-          : {};
-        
-        // Pass the headers to your service calls
-        const nodesResponse = await NodeService.getAllNodes(authHeader);
-        const connectionsResponse = await ConnectionService.getAllConnections(authHeader);
+        const nodesResponse = await NodeService.getAllNodes();
+        const connectionsResponse = await ConnectionService.getAllConnections();
         
         setNodes(nodesResponse.data);
         setConnections(connectionsResponse.data);

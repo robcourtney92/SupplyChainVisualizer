@@ -19,6 +19,10 @@ import Nodes from './pages/Nodes';
 import NodeDetails from './pages/NodeDetails';
 import Connections from './pages/Connections';
 import Products from './pages/Products';
+import ShipmentDetails from './pages/ShipmentDetails';
+import ShipmentForm from './pages/ShipmentForm';
+import ProductDetails from './pages/ProductDetails';
+import AdminRoute from './components/AdminRoute';
 // Authentication services and context
 import AuthService from './services/auth.service';
 import { AuthContext } from './context/AuthContext';
@@ -58,10 +62,13 @@ function App() {
                     <Route path="/map" element={<SupplyChainMap />} />
                     <Route path="/inventory" element={<Inventory />} />
                     <Route path="/shipments" element={<ShipmentTracker />} />
-                    <Route path="/nodes" element={<Nodes />} />
+                    <Route path="/nodes" element={<AdminRoute><Nodes /></AdminRoute>} />
                     <Route path="/nodes/:id" element={<NodeDetails />} />
-                    <Route path="/connections" element={<Connections />} />
-                    <Route path="/products" element={<Products />} />
+                    <Route path="/connections" element={<AdminRoute><Connections /></AdminRoute>} />
+                    <Route path="/products" element={<AdminRoute><Products /></AdminRoute>} />
+                    <Route path="/shipments/:id" element={<ShipmentDetails />} />
+                    <Route path="/shipments/new" element={<ShipmentForm />} />
+                    <Route path="/products/:id" element={<ProductDetails />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>
                 </main>

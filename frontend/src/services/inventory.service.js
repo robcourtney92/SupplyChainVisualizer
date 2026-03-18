@@ -28,6 +28,10 @@ class InventoryService {
     return axios.get(API_URL + 'product/' + productId, { headers: authHeader() });
   }
 
+  updateInventory(id, inventory) {
+    return axios.put(API_URL + id, inventory, { headers: authHeader() });
+  }
+
   getLowStockInventory() {
     return axios.get(API_URL + 'low-stock', { headers: authHeader() });
   }
