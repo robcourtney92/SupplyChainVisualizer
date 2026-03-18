@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.supplychainvisualizer.security.services.UserDetailsImpl;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
@@ -23,7 +23,7 @@ public class JwtUtils {
     @Value("${jwt.expiration}")
     private int jwtExpirationMs;
 
-    private Key getSigningKey() {
+    private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 
@@ -31,30 +31,30 @@ public class JwtUtils {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .subject(userPrincipal.getUsername())
+                .issuedAt(new Date())
+                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(getSigningKey())
                 .compact();
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody()
+                .parseSignedClaims(token)
+                .getPayload()
                 .getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
+            Jwts.parser()
+                .verifyWith(getSigningKey())
                 .build()
-                .parseClaimsJws(authToken);
+                .parseSignedClaims(authToken);
             return true;
-        } catch (SignatureException e) {
+        } catch (io.jsonwebtoken.security.SignatureException e) {
             logger.error("Invalid JWT signature: {}", e.getMessage());
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
